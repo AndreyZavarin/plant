@@ -20,8 +20,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Value("${demo.token.header}")
-    String tokenHeader;
+//    @Value("${demo.token.header}")
+//    String tokenHeader;
 
     @Bean
     public Docket api() {
@@ -38,7 +38,7 @@ public class SwaggerConfig {
 
     private Parameter get() {
         return new ParameterBuilder()
-                .name(tokenHeader)
+                .name("token header")
                 .description("Put JWT token here")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
