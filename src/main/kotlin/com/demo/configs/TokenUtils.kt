@@ -99,9 +99,9 @@ open class TokenUtils {
                 .compact()
     }
 
-    fun canTokenBeRefreshed(token: String, lastPasswordReset: LocalDateTime): Boolean? {
+    fun canTokenBeRefreshed(token: String, lastPasswordReset: LocalDateTime?): Boolean {
         val date = getTokenCreationDate(token)
-        return date != null && isCreatedBeforeLastPasswordReset(date, lastPasswordReset) && !isTokenExpired(token)
+        return date != null && (lastPasswordReset == null || isCreatedBeforeLastPasswordReset(date, lastPasswordReset)) && !isTokenExpired(token)
     }
 
     fun refreshToken(token: String): String? {
