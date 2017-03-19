@@ -47,21 +47,25 @@ open class WebSecurityConfiguration
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
-                .csrf()
-                .disable()
+                .csrf().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(this.unauthorizedHandler)
+                .authenticationEntryPoint(unauthorizedHandler)
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/", "/public/**", "/webjars/**", "/favicon.*").permitAll()
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/configuration/security", "/swagger-resources/**", "/swagger-ui.html").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
+        //.and().headers().addHeaderWriter()
         // Custom JWT based authentication
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter::class.java)
-    }
 
+//        http.authorizeRequests()
+//                .accessDeniedHandler(CustomAccessDeniedHandler())
+//                .authenticationEntryPoint(CustomAuthenticationEntryPoint())
+    }
 }
