@@ -20,11 +20,4 @@ open class AppUserDtoValidator : Validator {
             errors?.reject("password.no_match", "Passwords do not match")
         }
     }
-
-//    private fun validateEmail(errors: Errors, form: UserCreateForm) {
-//        if (userService.getUser(form.login).isPresent()) {
-//            errors.reject("login.exists", "AppUser with this login already exists")
-//        }
-//    }
-
 }

@@ -87,11 +87,11 @@
             <version>2.6.1</version>
         </dependency>
 
-        <!-- OAUTH2 -->
+        <!-- JWT -->
         <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-            <version>2.1.0.RELEASE</version>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.7.0</version>
         </dependency>
     </dependencies>
 
