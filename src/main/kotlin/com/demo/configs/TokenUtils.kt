@@ -110,7 +110,6 @@ open class TokenUtils {
         } catch (e: Exception) {
             refreshedToken = null
         }
-
         return refreshedToken
     }
 

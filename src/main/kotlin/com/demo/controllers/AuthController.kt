@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -46,13 +45,13 @@ class AuthController
 
     @RequestMapping(value = "\${demo.route.authentication.refresh}", method = arrayOf(RequestMethod.GET))
     fun authenticationRequest(request: HttpServletRequest): ResponseEntity<*> {
-        val token = request.getHeader(this.tokenHeader)
-        val username = this.tokenUtils.getUsernameFromToken(token)
+        val token = request.getHeader(tokenHeader)
+        val username = tokenUtils.getUsernameFromToken(token)
 
-        val user = this.userDetailsService.loadUserByUsername(username) as CurrentUser
-        if (this.tokenUtils.canTokenBeRefreshed(token, user.appUser.passwordSetDate)) { //user.getLastPasswordReset()
-            val refreshedToken = this.tokenUtils.refreshToken(token)
-            return ResponseEntity.ok(AuthResponse(refreshedToken))
+        val user = userDetailsService.loadUserByUsername(username) as CurrentUser
+        if (tokenUtils.canTokenBeRefreshed(token, user.appUser.passwordSetDate)!!) { //todo !!
+            val refreshedToken = tokenUtils.refreshToken(token)
+            return ResponseEntity.ok(AuthResponse(refreshedToken!!)) //todo !!
         } else {
             return ResponseEntity.badRequest().body<Any>(null)
         }
