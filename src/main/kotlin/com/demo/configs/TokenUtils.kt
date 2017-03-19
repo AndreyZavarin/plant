@@ -81,13 +81,14 @@ open class TokenUtils {
     }
 
     private fun isCreatedBeforeLastPasswordReset(created: LocalDateTime, lastPasswordReset: LocalDateTime?): Boolean {
-        return lastPasswordReset != null && created.isBefore(lastPasswordReset)
+        return lastPasswordReset == null || created.isBefore(lastPasswordReset)
     }
 
     fun generateToken(userDetails: UserDetails): String {
         val claims = HashMap<String, Any>()
         claims.put("sub", userDetails.username)
         claims.put("created", generateCurrentDate())
+        claims.put("role", userDetails.authorities)
         return generateToken(claims)
     }
 
