@@ -28,11 +28,11 @@ class AuthenticationTokenFilter : UsernamePasswordAuthenticationFilter() {
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
-        val authToken = httpRequest.getHeader(tokenHeader)
+        val authToken: String? = httpRequest.getHeader(tokenHeader)
 
         val username = tokenUtils.getUsernameFromToken(authToken)
 
-        if (username != null && SecurityContextHolder.getContext().authentication == null) {
+        if (username != null && authToken != null && SecurityContextHolder.getContext().authentication == null) {
             val userDetails = this.userDetailsService.loadUserByUsername(username)
             if (tokenUtils.tokenIsValid(authToken, userDetails)) {
                 val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)

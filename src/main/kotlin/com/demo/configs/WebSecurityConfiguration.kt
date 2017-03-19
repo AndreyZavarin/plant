@@ -38,8 +38,8 @@ open class WebSecurityConfiguration
 
     @Bean
     @Throws(Exception::class)
-    fun authenticationTokenFilterBean(): AuthenticationTokenFilter {
-        val authenticationTokenFilter = AuthenticationTokenFilter()
+    open fun authenticationTokenFilterBean(): AuthenticationTokenFilter {
+        var authenticationTokenFilter = AuthenticationTokenFilter()
         authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean())
         return authenticationTokenFilter
     }

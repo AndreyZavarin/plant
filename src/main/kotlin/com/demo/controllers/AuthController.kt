@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@RequestMapping("\${cerberus.route.authentication}")
+@RequestMapping("\${demo.route.authentication}")
 class AuthController
 @Autowired constructor(private val authenticationManager: AuthenticationManager,
                        private val tokenUtils: TokenUtils,
                        private val userDetailsService: UserDetailsService,
-                       @Value("\${cerberus.token.header}") private val tokenHeader: String) {
+                       @Value("\${demo.token.header}") private val tokenHeader: String) {
 
     @RequestMapping(method = arrayOf(RequestMethod.POST))
     @Throws(AuthenticationException::class)

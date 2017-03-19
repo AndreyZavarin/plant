@@ -10,8 +10,8 @@ import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
-class UserController @Autowired constructor(private val userService: AppUserService, private val userValidator: AppUserDtoValidator) {
+//@PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
+open class UserController @Autowired constructor(private val userService: AppUserService, private val userValidator: AppUserDtoValidator) {
 
     @InitBinder()
     private fun initBinder(binder: WebDataBinder) {
