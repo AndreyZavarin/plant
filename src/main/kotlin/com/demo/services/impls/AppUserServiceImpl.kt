@@ -20,10 +20,6 @@ class AppUserServiceImpl
         return appUserRepository.save(appUser)
     }
 
-    override fun read(id: Long): AppUser {
-        return appUserRepository.findOne(id)
-    }
-
     override fun update(dto: AppUserDto): AppUser {
         val appUser = read(dto.id!!)
         appUser.role = dto.role
@@ -34,9 +30,9 @@ class AppUserServiceImpl
         return appUserRepository.save(appUser);
     }
 
-    override fun delete(id: Long) {
-//        appUserRepository.delete(id);
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun read(id: Long): AppUser = appUserRepository.findOne(id)
 
+    override fun delete(id: Long): Unit = throw UnsupportedOperationException("not implemented")
+
+    override fun findUserByLogin(login: String): AppUser = appUserRepository.findUserByLogin(login)
 }
