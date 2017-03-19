@@ -30,6 +30,8 @@ class AuthenticationTokenFilter : UsernamePasswordAuthenticationFilter() {
         val httpRequest = request as HttpServletRequest
         val authToken: String? = httpRequest.getHeader(tokenHeader)
 
+        println("request.cookies = ${request.cookies}")
+        
         val username = tokenUtils.getUsernameFromToken(authToken)
 
         if (username != null && authToken != null && SecurityContextHolder.getContext().authentication == null) {

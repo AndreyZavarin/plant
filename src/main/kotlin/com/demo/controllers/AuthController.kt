@@ -6,6 +6,8 @@ import com.demo.dto.AuthResponse
 import com.demo.services.auth.CurrentUser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -41,6 +43,15 @@ class AuthController
 
         // Return the token
         return ResponseEntity.ok(AuthResponse(token))
+    }
+
+    @RequestMapping(value = "getCookie")
+    fun getCookie(request: HttpServletRequest): ResponseEntity<*> {
+        val token = request.getHeader(tokenHeader)
+        println("token = ${token}")
+        val headers = HttpHeaders()
+        headers.add("Set-Cookie", "heroku-nav-data=" + token)
+        return ResponseEntity(":О", headers, HttpStatus.OK)
     }
 
     @RequestMapping(value = "\${demo.route.authentication.refresh}", method = arrayOf(RequestMethod.GET))
