@@ -28,15 +28,19 @@ class AuthenticationTokenFilter : UsernamePasswordAuthenticationFilter() {
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
-        val authToken: String? = httpRequest.getHeader(tokenHeader)
+        var authToken: String? = httpRequest.getHeader(tokenHeader)
 
-        println("request.cookies = ${request.cookies}")
-        
+        if (authToken == null && request.cookies != null) {
+            request.cookies
+                    .filter { it.name == "token-cookie" }
+                    .forEach { authToken = it.value }
+        }
+
         val username = tokenUtils.getUsernameFromToken(authToken)
 
         if (username != null && authToken != null && SecurityContextHolder.getContext().authentication == null) {
             val userDetails = this.userDetailsService.loadUserByUsername(username)
-            if (tokenUtils.tokenIsValid(authToken, userDetails)) {
+            if (tokenUtils.tokenIsValid(authToken!!, userDetails)) {
                 val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(httpRequest)
                 SecurityContextHolder.getContext().authentication = authentication

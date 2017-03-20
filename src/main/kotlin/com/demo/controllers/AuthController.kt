@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("\${demo.route.authentication}")
@@ -46,12 +48,13 @@ class AuthController
     }
 
     @RequestMapping(value = "getCookie")
-    fun getCookie(request: HttpServletRequest): ResponseEntity<*> {
+    fun getCookie(request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<*> {
         val token = request.getHeader(tokenHeader)
-        println("token = ${token}")
-        val headers = HttpHeaders()
-        headers.add("Set-Cookie", "heroku-nav-data=" + token)
-        return ResponseEntity(":О", headers, HttpStatus.OK)
+        val cookie = Cookie("token-cookie", token)
+        cookie.path = "/";
+        cookie.domain = ""
+        response.addCookie(cookie)
+        return ResponseEntity.ok(":О")
     }
 
     @RequestMapping(value = "\${demo.route.authentication.refresh}", method = arrayOf(RequestMethod.GET))
