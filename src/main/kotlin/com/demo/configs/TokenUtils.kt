@@ -52,7 +52,7 @@ open class TokenUtils {
 
     private fun generateExpirationDate(): Date = Date(System.currentTimeMillis() + expiration * 1000)
 
-    private fun isCreatedBeforeLastPasswordReset(created: LocalDateTime, lastPasswordReset: LocalDateTime): Boolean = created.isBefore(lastPasswordReset)
+    private fun isCreatedAfterLastPasswordReset(created: LocalDateTime, lastPasswordReset: LocalDateTime): Boolean = created.isAfter(lastPasswordReset)
 
     /**
      * try to find cookie with token in cookies array
@@ -95,7 +95,7 @@ open class TokenUtils {
 
     fun canTokenBeRefreshed(token: String, lastPasswordReset: LocalDateTime): Boolean {
         val date = getTokenCreationDate(token) ?: return false;
-        return isCreatedBeforeLastPasswordReset(date, lastPasswordReset) && !tokenIsExpired(token)
+        return isCreatedAfterLastPasswordReset(date, lastPasswordReset) && !tokenIsExpired(token)
     }
 
     fun refreshToken(token: String): String? {
@@ -111,8 +111,8 @@ open class TokenUtils {
 
         val created = getTokenCreationDate(token)
 
-        val isCreatedBeforeLastPasswordReset = created == null || isCreatedBeforeLastPasswordReset(created, user.appUser.passwordSetDate);
-        return username == user.username && !tokenIsExpired(token) && isCreatedBeforeLastPasswordReset
+        val isCreatedAfterLastPasswordReset = created != null && isCreatedAfterLastPasswordReset(created, user.appUser.passwordSetDate);
+        return username == user.username && !tokenIsExpired(token) && isCreatedAfterLastPasswordReset
     }
 
     private fun String.getClaimsFromToken(): Claims? {
@@ -120,6 +120,7 @@ open class TokenUtils {
         try {
             claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(this).body
         } catch (e: Exception) {
+            //e.printStackTrace()
             claims = null
         }
         return claims

@@ -57,6 +57,7 @@ class AuthController
     }
 
     @RequestMapping(value = "\${demo.route.authentication.refresh}", method = arrayOf(RequestMethod.GET))
+    //todo refactor this
     fun authenticationRequest(request: HttpServletRequest): ResponseEntity<*> {
         val token = request.getHeader(tokenUtils.tokenHeader)
         val username = tokenUtils.getUsernameFromToken(token)

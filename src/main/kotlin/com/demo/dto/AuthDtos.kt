@@ -3,8 +3,8 @@ package com.demo.dto
 import java.io.Serializable
 
 data class AuthRequest(
-        val password: String,
-        val username: String
+        val username: String,
+        val password: String
 ) : Serializable
 
 data class AuthResponse(
