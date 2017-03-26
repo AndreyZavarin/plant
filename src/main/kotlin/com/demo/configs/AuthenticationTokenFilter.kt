@@ -30,24 +30,27 @@ class AuthenticationTokenFilter : UsernamePasswordAuthenticationFilter() {
         val httpRequest = request as HttpServletRequest
         var authToken: String? = httpRequest.getHeader(tokenHeader)
 
-        if (authToken == null && request.cookies != null) {
-            request.cookies
-                    .filter { it.name == "token-cookie" }
-                    .forEach { authToken = it.value }
+        if (authToken == null) {
+            authToken = tokenUtils.findTokenInCookie(request.cookies)
         }
 
-        val username = tokenUtils.getUsernameFromToken(authToken)
-
-        if (username != null && authToken != null && SecurityContextHolder.getContext().authentication == null) {
-            val userDetails = this.userDetailsService.loadUserByUsername(username)
-            if (tokenUtils.tokenIsValid(authToken!!, userDetails)) {
-                val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
-                authentication.details = WebAuthenticationDetailsSource().buildDetails(httpRequest)
-                SecurityContextHolder.getContext().authentication = authentication
-            }
+        if (authToken != null && SecurityContextHolder.getContext().authentication == null) {
+            persistAuthInSecurityContext(authToken, httpRequest)
         }
 
         chain.doFilter(request, response)
+    }
+
+    private fun persistAuthInSecurityContext(authToken : String, httpRequest : HttpServletRequest) {
+        val username = tokenUtils.getUsernameFromToken(authToken) ?: return
+        val userDetails = userDetailsService.loadUserByUsername(username) ?: return
+
+        if (tokenUtils.tokenIsValid(authToken, userDetails)) {
+            val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+            authentication.details = WebAuthenticationDetailsSource().buildDetails(httpRequest)
+
+            SecurityContextHolder.getContext().authentication = authentication
+        }
     }
 
 }

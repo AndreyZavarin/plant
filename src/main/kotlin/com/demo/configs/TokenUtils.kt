@@ -10,15 +10,19 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.*
+import javax.servlet.http.Cookie
 
 @Component
 open class TokenUtils {
 
     @Value("\${demo.token.secret}")
-    private val secret: String? = null
+    private val secret: String = ""
 
     @Value("\${demo.token.expiration}")
-    private val expiration: Long? = null
+    private val expiration: Long = 0
+
+    @Value("\${demo.token.cookie.name}")
+    private var cookieName: String = ""
 
     fun getUsernameFromToken(token: String?): String? {
         if (token == null) {
@@ -32,6 +36,15 @@ open class TokenUtils {
             username = null
         }
         return username
+    }
+
+    fun findTokenInCookie(cookies: Array<Cookie>?): String? {
+        if (cookies != null) {
+            cookies
+                    .filter { it.name == cookieName }
+                    .forEach { return it.value }
+        }
+        return null
     }
 
     fun getTokenCreationDate(token: String): LocalDateTime? {
