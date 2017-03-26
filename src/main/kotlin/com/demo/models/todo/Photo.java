@@ -1,9 +1,11 @@
-package com.demo.models;
+package com.demo.models.todo;
 
+
+import com.demo.models.AppUser;
+import com.demo.models.Client;
 
 import java.time.LocalDateTime;
 
-//todo
 public class Photo {
 
     public Long id;

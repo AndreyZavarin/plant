@@ -1,6 +1,5 @@
-package com.demo.models;
+package com.demo.models.todo;
 
-//todo
 public class Image {
 
     public Long id;

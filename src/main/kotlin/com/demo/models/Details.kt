@@ -1,44 +1,44 @@
-package com.demo.models;
+package com.demo.models
 
-import javax.persistence.*;
+import javax.persistence.*
 
 @Entity
 @Table(name = "client_details")
-public class Details {
-
-    private static final int DESCRIPTION_SIZE = 500;
+class Details() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    public Long id;
+    var id = -1;
 
     @Column(length = DESCRIPTION_SIZE)
-    String experience;
+    var experience: String = ""
 
     @Column(length = DESCRIPTION_SIZE)
-    String achievements;
+    var achievements: String = "";
 
     @Column(length = DESCRIPTION_SIZE)
-    String targets;
+    var targets: String = "";
 
     @Column(length = DESCRIPTION_SIZE)
-    String lastCold;
+    var lastCold: String = "";
 
     @Column(length = DESCRIPTION_SIZE)
-    String contraindications;
+    var contraindications: String = "";
 
     @Column(length = DESCRIPTION_SIZE)
-    String injuries;
+    var injuries: String = "";
 
     @Column(length = DESCRIPTION_SIZE)
-    String referrer;
+    var referrer: String = "";
 
     @Column()
-    boolean crossFit;
+    var crossFit: Boolean = false;
 
     @Column(name = "rules_accepted")
-    boolean rulesAccepted;
+    var rulesAccepted: Boolean = false;
 
-
+    companion object {
+        const private val DESCRIPTION_SIZE = 500
+    }
 }
