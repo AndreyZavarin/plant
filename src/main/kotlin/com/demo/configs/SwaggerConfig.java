@@ -26,7 +26,6 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(getInfo())
                 .globalOperationParameters(Lists.newArrayList(get()))
                 .select()
                 .apis(RequestHandlerSelectors.any())
@@ -40,14 +39,6 @@ public class SwaggerConfig {
                 .description("Put JWT token here")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
-                .build();
-    }
-
-    private ApiInfo getInfo() {
-        return new ApiInfoBuilder()
-                .title("Plant application API demo")
-                .description("REST API DEMO")
-                .version("0.1")
                 .build();
     }
 }

@@ -4,7 +4,6 @@ import com.demo.models.enums.Role
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 import javax.persistence.*
-import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "app_user")
@@ -15,7 +14,6 @@ class AppUser() {
     @Column(name = "id", nullable = false, updatable = false)
     var id: Long = -1
 
-    @Size(min = 4)
     @Column(name = "login", nullable = false, unique = true, updatable = false)
     var login: String = ""
 
