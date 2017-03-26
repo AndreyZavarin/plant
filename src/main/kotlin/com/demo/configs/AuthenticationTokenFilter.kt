@@ -22,13 +22,10 @@ class AuthenticationTokenFilter : UsernamePasswordAuthenticationFilter() {
     @Autowired
     lateinit var userDetailsService: UserDetailsService
 
-    @Value("\${demo.token.header}")
-    var tokenHeader: String = ""
-
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
-        var authToken: String? = httpRequest.getHeader(tokenHeader)
+        var authToken: String? = httpRequest.getHeader(tokenUtils.tokenHeader)
 
         if (authToken == null) {
             authToken = tokenUtils.findTokenInCookie(request.cookies)

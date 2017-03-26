@@ -10,3 +10,8 @@ data class AuthRequest(
 data class AuthResponse(
         val token: String
 ) : Serializable
+
+data class StringResponse(
+        val response: String,
+        val state: String
+) : Serializable

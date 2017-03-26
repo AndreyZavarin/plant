@@ -94,10 +94,18 @@
             <version>0.7.0</version>
         </dependency>
 
+        <!-- fixes kotlin parsing -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
             <version>2.9.0.pr1</version>
+        </dependency>
+
+        <!-- IN MEMORY DB FOR TESTING -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.188</version>
         </dependency>
     </dependencies>
 

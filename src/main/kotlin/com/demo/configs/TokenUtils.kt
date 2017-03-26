@@ -21,6 +21,9 @@ open class TokenUtils {
     @Value("\${demo.token.expiration}")
     private val expiration: Long = 0
 
+    @Value("\${demo.token.header}")
+    var tokenHeader: String = ""
+
     @Value("\${demo.token.cookie.name}")
     var cookieName: String = ""
 

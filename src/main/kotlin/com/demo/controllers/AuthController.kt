@@ -27,8 +27,7 @@ import javax.servlet.http.HttpServletResponse
 class AuthController
 @Autowired constructor(private val authenticationManager: AuthenticationManager,
                        private val tokenUtils: TokenUtils,
-                       private val userDetailsService: UserDetailsService,
-                       @Value("\${demo.token.header}") private val tokenHeader: String) {
+                       private val userDetailsService: UserDetailsService) {
 
     @RequestMapping(method = arrayOf(RequestMethod.POST))
     @Throws(AuthenticationException::class)
@@ -49,7 +48,7 @@ class AuthController
 
     @RequestMapping(value = "getCookie")
     fun getCookie(request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<*> {
-        val token = request.getHeader(tokenHeader)
+        val token = request.getHeader(tokenUtils.tokenHeader)
         val cookie = Cookie(tokenUtils.cookieName, token)
         cookie.path = "/";
         cookie.domain = ""
@@ -59,7 +58,7 @@ class AuthController
 
     @RequestMapping(value = "\${demo.route.authentication.refresh}", method = arrayOf(RequestMethod.GET))
     fun authenticationRequest(request: HttpServletRequest): ResponseEntity<*> {
-        val token = request.getHeader(tokenHeader)
+        val token = request.getHeader(tokenUtils.tokenHeader)
         val username = tokenUtils.getUsernameFromToken(token)
 
         val user = userDetailsService.loadUserByUsername(username) as CurrentUser
