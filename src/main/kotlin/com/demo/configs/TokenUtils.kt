@@ -24,20 +24,37 @@ open class TokenUtils {
     @Value("\${demo.token.cookie.name}")
     private var cookieName: String = ""
 
-    fun getUsernameFromToken(token: String?): String? {
-        if (token == null) {
-            return null
-        }
-        var username: String?
-        try {
-            val claims = getClaimsFromToken(token)
-            username = claims?.subject
-        } catch (e: Exception) {
-            username = null
-        }
-        return username
-    }
+    /**
+     * try to parse jwt token claims and return subject from it
+     * @param token - token that we want to parse
+     * @return - subject (user login) or null
+     */
+    fun getUsernameFromToken(token: String?): String? = token?.getClaimsFromToken()?.subject
 
+    /**
+     * try to parse jwt token and return date of token's creation
+     * @param token - token that we want to parse
+     * @return - issuedAt (timestamp of token's creation) or null
+     */
+    fun getTokenCreationDate(token: String): LocalDateTime? = token.getClaimsFromToken()?.issuedAt?.toLocalDateTime()
+
+    /**
+     * try to parse jwt token and return date of it's expiration time
+     * @param token - token that we want to parse
+     * @return- token expiration date or null
+     */
+    fun getExpirationDateFromToken(token: String): LocalDateTime? = token.getClaimsFromToken()?.expiration?.toLocalDateTime()
+
+    private fun generateCurrentDate(): Date = Date(System.currentTimeMillis())
+
+    private fun generateExpirationDate(): Date = Date(System.currentTimeMillis() + expiration * 1000)
+
+    private fun isCreatedBeforeLastPasswordReset(created: LocalDateTime, lastPasswordReset: LocalDateTime): Boolean = created.isBefore(lastPasswordReset)
+
+    /**
+     * try to find cookie with token in cookies array
+     * @param cookies - array of cookies where search at
+     */
     fun findTokenInCookie(cookies: Array<Cookie>?): String? {
         if (cookies != null) {
             cookies
@@ -47,60 +64,19 @@ open class TokenUtils {
         return null
     }
 
-    fun getTokenCreationDate(token: String): LocalDateTime? {
-        var created: Date?
-        try {
-            val claims = getClaimsFromToken(token)
-            created = Date(claims!!["created"] as Long)
-        } catch (e: Exception) {
-            created = null
-        }
-
-        return created?.toLocalDateTime()
+    private fun tokenIsExpired(token: String): Boolean {
+        val expiration = getExpirationDateFromToken(token) ?: return false
+        return expiration.isBefore(LocalDateTime.now())
     }
 
-    fun getExpirationDateFromToken(token: String): LocalDateTime? {
-        var expiration: Date?
-        try {
-            val claims = getClaimsFromToken(token)
-            expiration = claims?.expiration
-        } catch (e: Exception) {
-            expiration = null
-        }
-        return expiration?.toLocalDateTime()
-    }
-
-    private fun getClaimsFromToken(token: String): Claims? {
-        var claims: Claims?
-        try {
-            claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).body
-        } catch (e: Exception) {
-            claims = null
-        }
-        return claims
-    }
-
-    private fun generateCurrentDate(): Date {
-        return Date(System.currentTimeMillis())
-    }
-
-    private fun generateExpirationDate(): Date {
-        return Date(System.currentTimeMillis() + expiration!! * 1000)
-    }
-
-    private fun isTokenExpired(token: String): Boolean {
-        val expiration = getExpirationDateFromToken(token)
-        return expiration == null || expiration.isBefore(LocalDateTime.now())
-    }
-
-    private fun isCreatedBeforeLastPasswordReset(created: LocalDateTime, lastPasswordReset: LocalDateTime?): Boolean {
-        return lastPasswordReset == null || created.isBefore(lastPasswordReset)
-    }
-
+    /**
+     * generates jwt token from user details
+     * @param - user details
+     * @return - json web token
+     */
     fun generateToken(userDetails: UserDetails): String {
         val claims = HashMap<String, Any>()
         claims.put("sub", userDetails.username)
-        claims.put("created", generateCurrentDate())
         claims.put("role", userDetails.authorities)
         return generateToken(claims)
     }
@@ -108,26 +84,22 @@ open class TokenUtils {
     private fun generateToken(claims: Map<String, Any>?): String {
         return Jwts.builder()
                 .setClaims(claims)
+                .setIssuedAt(generateCurrentDate())
                 .setExpiration(generateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact()
     }
 
-    fun canTokenBeRefreshed(token: String, lastPasswordReset: LocalDateTime?): Boolean {
-        val date = getTokenCreationDate(token)
-        return date != null && (lastPasswordReset == null || isCreatedBeforeLastPasswordReset(date, lastPasswordReset)) && !isTokenExpired(token)
+    fun canTokenBeRefreshed(token: String, lastPasswordReset: LocalDateTime): Boolean {
+        val date = getTokenCreationDate(token) ?: return false;
+        return isCreatedBeforeLastPasswordReset(date, lastPasswordReset) && !tokenIsExpired(token)
     }
 
     fun refreshToken(token: String): String? {
-        var refreshedToken: String?
-        try {
-            val claims = getClaimsFromToken(token)
-            claims?.put("created", generateCurrentDate())
-            refreshedToken = generateToken(claims)
-        } catch (e: Exception) {
-            refreshedToken = null
-        }
-        return refreshedToken
+        val claimsFromToken = token.getClaimsFromToken() ?: return null;
+        claimsFromToken.issuedAt = generateCurrentDate()
+
+        return generateToken(claimsFromToken)
     }
 
     fun tokenIsValid(token: String, userDetails: UserDetails): Boolean {
@@ -137,7 +109,17 @@ open class TokenUtils {
         val created = getTokenCreationDate(token)
 
         val isCreatedBeforeLastPasswordReset = created == null || isCreatedBeforeLastPasswordReset(created, user.appUser.passwordSetDate);
-        return username == user.username && !isTokenExpired(token) && isCreatedBeforeLastPasswordReset
+        return username == user.username && !tokenIsExpired(token) && isCreatedBeforeLastPasswordReset
+    }
+
+    private fun String.getClaimsFromToken(): Claims? {
+        var claims: Claims?
+        try {
+            claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(this).body
+        } catch (e: Exception) {
+            claims = null
+        }
+        return claims
     }
 
 }
