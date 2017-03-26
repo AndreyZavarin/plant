@@ -22,7 +22,7 @@ open class TokenUtils {
     private val expiration: Long = 0
 
     @Value("\${demo.token.cookie.name}")
-    private var cookieName: String = ""
+    var cookieName: String = ""
 
     /**
      * try to parse jwt token claims and return subject from it

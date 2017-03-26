@@ -50,7 +50,7 @@ class AuthController
     @RequestMapping(value = "getCookie")
     fun getCookie(request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<*> {
         val token = request.getHeader(tokenHeader)
-        val cookie = Cookie("token-cookie", token)
+        val cookie = Cookie(tokenUtils.cookieName, token)
         cookie.path = "/";
         cookie.domain = ""
         response.addCookie(cookie)
