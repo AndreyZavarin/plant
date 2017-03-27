@@ -4,13 +4,12 @@ import com.demo.controllers.validators.AppUserDtoValidator
 import com.demo.models.AppUser
 import com.demo.services.AppUserService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
 
 @RestController
-//@PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
+@PreAuthorize("hasRole('admin')") //todo check
 open class UserController @Autowired constructor(private val userService: AppUserService, private val userValidator: AppUserDtoValidator) {
 
     @InitBinder()

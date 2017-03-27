@@ -1,0 +1,35 @@
+= Greeting REST Service API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+= Resources
+
+== AUTH-TEST
+
+The Greeting provides the entry point into the service.
+
+=== Accessing the greeting GET with provided content
+
+==== Request structure
+
+include::{snippets}/plant-application-tests/auth-test/http-request.adoc[]
+
+==== Request fields
+
+include::{snippets}/plant-application-tests/auth-test/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/plant-application-tests/auth-test/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/plant-application-tests/auth-test/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/plant-application-tests/auth-test/curl-request.adoc[]

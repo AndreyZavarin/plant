@@ -31,7 +31,7 @@ class AuthController
 
     @RequestMapping(method = arrayOf(RequestMethod.POST))
     @Throws(AuthenticationException::class)
-    fun authenticationRequest(@RequestBody authenticationRequest: AuthRequest): ResponseEntity<*> {
+    fun authenticationRequest(@RequestBody(required = true) authenticationRequest: AuthRequest): ResponseEntity<*> {
 
         // Perform the authentication
         val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(authenticationRequest.username, authenticationRequest.password)
@@ -46,18 +46,18 @@ class AuthController
         return ResponseEntity.ok(AuthResponse(token))
     }
 
-    @RequestMapping(value = "getCookie")
-    fun getCookie(request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<*> {
-        val token = request.getHeader(tokenUtils.tokenHeader)
-        val cookie = Cookie(tokenUtils.cookieName, token)
-        cookie.path = "/";
-        cookie.domain = ""
-        response.addCookie(cookie)
-        return ResponseEntity.ok(":О")
-    }
+//    @RequestMapping(value = "getCookie")
+//    fun getCookie(request: HttpServletRequest, response: HttpServletResponse): ResponseEntity<*> {
+//        val token = request.getHeader(tokenUtils.tokenHeader)
+//        val cookie = Cookie(tokenUtils.cookieName, token)
+//        cookie.path = "/";
+//        cookie.domain = ""
+//        response.addCookie(cookie)
+//        return ResponseEntity.ok(":О")
+//    }
 
     @RequestMapping(value = "\${demo.route.authentication.refresh}", method = arrayOf(RequestMethod.GET))
-    //todo refactor this
+            //todo refactor this
     fun authenticationRequest(request: HttpServletRequest): ResponseEntity<*> {
         val token = request.getHeader(tokenUtils.tokenHeader)
         val username = tokenUtils.getUsernameFromToken(token)
