@@ -19,13 +19,13 @@ open class TokenUtils {
     private val secret: String = ""
 
     @Value("\${demo.token.expiration}")
-    private val expiration: Long = 0
+    var expiration: Long = 0
 
     @Value("\${demo.token.header}")
-    var tokenHeader: String = ""
+    lateinit var tokenHeader: String
 
     @Value("\${demo.token.cookie.name}")
-    var cookieName: String = ""
+    lateinit var cookieName: String
 
     /**
      * try to parse jwt token claims and return subject from it
@@ -111,19 +111,16 @@ open class TokenUtils {
 
         val created = getTokenCreationDate(token)
 
-        val isCreatedAfterLastPasswordReset = created != null && isCreatedAfterLastPasswordReset(created, user.appUser.passwordSetDate);
-        return username == user.username && !tokenIsExpired(token) && isCreatedAfterLastPasswordReset
+        return username == user.username && !tokenIsExpired(token)
+                && created != null && isCreatedAfterLastPasswordReset(created, user.appUser.passwordSetDate);
     }
 
     private fun String.getClaimsFromToken(): Claims? {
-        var claims: Claims?
         try {
-            claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(this).body
+            return Jwts.parser().setSigningKey(secret).parseClaimsJws(this).body
         } catch (e: Exception) {
-            //e.printStackTrace()
-            claims = null
+            return null
         }
-        return claims
     }
 
 }

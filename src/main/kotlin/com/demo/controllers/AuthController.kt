@@ -47,10 +47,12 @@ class AuthController
         val user = userDetailsService.loadUserByUsername(username) as CurrentUser
         if (tokenUtils.canTokenBeRefreshed(token, user.appUser.passwordSetDate)) {
             val refreshedToken = tokenUtils.refreshToken(token)
-            return ResponseEntity.ok(AuthResponse(refreshedToken!!))
-        } else {
-            return ResponseEntity.badRequest().body<Any>(null)
+            if (refreshedToken != null) {
+                return ResponseEntity.ok(AuthResponse(refreshedToken))
+            }
         }
+
+        return ResponseEntity.badRequest().body<Any>(null)
     }
 
 }
