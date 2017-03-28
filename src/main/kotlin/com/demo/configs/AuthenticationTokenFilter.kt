@@ -25,11 +25,11 @@ class AuthenticationTokenFilter : UsernamePasswordAuthenticationFilter() {
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
-        var authToken: String? = httpRequest.getHeader(tokenUtils.tokenHeader)
+        val authToken: String? = httpRequest.getHeader(tokenUtils.tokenHeader)
 
-        if (authToken == null) {
-            authToken = tokenUtils.findTokenInCookie(request.cookies)
-        }
+//        if (authToken == null) {
+//            authToken = tokenUtils.findTokenInCookie(request.cookies)
+//        }
 
         if (authToken != null && SecurityContextHolder.getContext().authentication == null) {
             persistAuthInSecurityContext(authToken, httpRequest)
