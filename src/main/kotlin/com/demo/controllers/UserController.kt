@@ -9,7 +9,7 @@ import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@PreAuthorize("hasRole('admin')") //todo check
+@PreAuthorize("hasRole('ADMIN')")
 open class UserController @Autowired constructor(private val userService: AppUserService, private val userValidator: AppUserDtoValidator) {
 
     @InitBinder()

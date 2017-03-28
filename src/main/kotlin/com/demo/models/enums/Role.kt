@@ -7,6 +7,6 @@ enum class Role {
     NONE, ADMIN, USER, GUEST;
 
     fun getAuthorities(): MutableCollection<out GrantedAuthority>? {
-        return AuthorityUtils.createAuthorityList(name);
+        return AuthorityUtils.createAuthorityList("ROLE_${name}")
     }
 }

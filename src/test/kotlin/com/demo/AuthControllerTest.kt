@@ -2,9 +2,10 @@ package com.demo
 
 import com.demo.configs.TokenUtils
 import com.demo.dto.AuthRequest
+import com.demo.models.AppUser
 import com.demo.repositories.AppUserRepository
 import com.demo.services.auth.CurrentUser
-import com.demo.utility.getUserDetails
+import com.demo.services.auth.getUserDetails
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
@@ -20,7 +21,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.temporal.ChronoUnit
 import java.util.*
-
 
 class AuthControllerTest : IntegrationTest() {
 
@@ -54,8 +54,7 @@ class AuthControllerTest : IntegrationTest() {
 
     @Test
     fun refreshToken() {
-        val admin = appUserRepository.findUserByLogin("admin")
-        val initialToken = generateValidToken(admin.getUserDetails())
+        val (_, initialToken) = getUserAndHisToken("admin")
 
         Thread.sleep(500)
 
@@ -77,6 +76,23 @@ class AuthControllerTest : IntegrationTest() {
                     Assert.assertEquals(tokenUtils.expiration, between)
                 }
                 .andDo(MockMvcRestDocumentation.document("api/refresh", *getRefreshMethodSnippets()))
+    }
+
+    @Test //todo finish this
+    fun accessProtectedResource() {
+        val (admin, adminsToken) = getUserAndHisToken("admin")
+        val (user, usersToken) = getUserAndHisToken("user")
+
+        val request = MockMvcRequestBuilders.get("/user/${admin.id}").header(tokenUtils.tokenHeader, adminsToken)
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.content().contentType(jsonType))
+    }
+
+    private fun getUserAndHisToken(login: String): Pair<AppUser, String> {
+        val user = appUserRepository.findUserByLogin(login)
+        return Pair(user, generateValidToken(user.getUserDetails()))
     }
 
     private fun generateValidToken(userDetails: UserDetails): String {

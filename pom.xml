@@ -107,6 +107,13 @@
             <artifactId>h2</artifactId>
             <version>1.4.194</version>
         </dependency>
+
+        <!-- FOR SECURITY CONTEXT IN TESTS -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>4.2.2.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <!-- Further is boring -->

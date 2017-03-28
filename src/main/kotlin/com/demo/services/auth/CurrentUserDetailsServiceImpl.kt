@@ -13,10 +13,11 @@ open class CurrentUserDetailsServiceImpl
 @Autowired constructor(private val appUserService: AppUserService) : UserDetailsService {
 
     override fun loadUserByUsername(login: String): UserDetails {
-        val findUserByLogin = appUserService.findUserByLogin(login)
-        return CurrentUser(findUserByLogin);
+        return appUserService.findUserByLogin(login).getUserDetails()
     }
 
 }
 
 class CurrentUser(val appUser: AppUser) : User(appUser.login, appUser.passwordHash, appUser.role.getAuthorities())
+
+fun AppUser.getUserDetails(): UserDetails = CurrentUser(this)
