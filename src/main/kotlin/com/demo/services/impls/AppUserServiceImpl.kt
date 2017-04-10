@@ -21,7 +21,7 @@ class AppUserServiceImpl
         return appUserRepository.save(appUser)
     }
 
-    override fun update(dto: AppUserDto): AppUser {
+    override fun update(id: Long, dto: AppUserDto): AppUser {
         val appUser = read(dto.id!!).get()
         appUser.role = dto.role
         appUser.passwordHash = passwordEncoder.encode(dto.password);

@@ -20,7 +20,7 @@ class ClientServiceImpl
         return clientRepository.findOne(id)
     }
 
-    override fun update(dto: ClientDto): Client {
+    override fun update(id: Long, dto: ClientDto): Client {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
