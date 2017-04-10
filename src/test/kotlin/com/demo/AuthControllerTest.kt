@@ -12,10 +12,13 @@ import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
+import org.springframework.restdocs.headers.HeaderDocumentation
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Snippet
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -45,60 +48,10 @@ class AuthControllerTest : IntegrationTest() {
         val request = MockMvcRequestBuilders.post("/auth").content(jsonBody).contentType(jsonType)
 
         mockMvc.perform(request)
-                //.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(jsonType))
                 .andDo { validateToken(it.response.contentAsString.getTokenFromJson(), "admin") }
-                .andDo(MockMvcRestDocumentation.document("api/auth", *getAuthMethodSnippets()))
-    }
-
-    @Test
-    fun refreshToken() {
-        val (_, initialToken) = getUserAndHisToken("admin")
-
-        Thread.sleep(500)
-
-        val request = MockMvcRequestBuilders.get("/refresh").header(tokenUtils.tokenHeader, initialToken)
-
-        mockMvc.perform(request)
-                .andDo(MockMvcResultHandlers.print())
-                .andDo {
-                    val refreshedToken = it.response.contentAsString.getTokenFromJson()
-                    validateToken(refreshedToken, "admin")
-
-                    val expirationDateFromToken = tokenUtils.getExpirationDateFromToken(refreshedToken)
-                    val tokenCreationDate = tokenUtils.getTokenCreationDate(refreshedToken)
-
-                    Assert.assertTrue(tokenCreationDate!!.isAfter(tokenUtils.getTokenCreationDate(initialToken)))
-                    Assert.assertTrue(expirationDateFromToken!!.isAfter(tokenUtils.getTokenCreationDate(initialToken)))
-
-                    val between = ChronoUnit.SECONDS.between(tokenCreationDate, expirationDateFromToken)
-                    Assert.assertEquals(tokenUtils.expiration, between)
-                }
-                .andDo(MockMvcRestDocumentation.document("api/refresh", *getRefreshMethodSnippets()))
-    }
-
-    @Test //todo finish this
-    fun accessProtectedResource() {
-        val (admin, adminsToken) = getUserAndHisToken("admin")
-        val (user, usersToken) = getUserAndHisToken("user")
-
-        val request = MockMvcRequestBuilders.get("/user/${admin.id}").header(tokenUtils.tokenHeader, adminsToken)
-        mockMvc.perform(request)
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(MockMvcResultMatchers.content().contentType(jsonType))
-    }
-
-    private fun getUserAndHisToken(login: String): Pair<AppUser, String> {
-        val user = appUserRepository.findUserByLogin(login)
-        return Pair(user, generateValidToken(user.getUserDetails()))
-    }
-
-    private fun generateValidToken(userDetails: UserDetails): String {
-        val generatedToken = tokenUtils.generateToken(userDetails)
-        Assert.assertTrue(tokenUtils.tokenIsValid(generatedToken, userDetails))
-        return generatedToken
+                .andDo(document("api/auth", *getAuthMethodSnippets()))
     }
 
     private fun getAuthMethodSnippets(): Array<Snippet> {
@@ -114,9 +67,73 @@ class AuthControllerTest : IntegrationTest() {
         return arrayOf(requestFields, responseFields);
     }
 
-    //todo doc this later
+    @Test
+    fun refreshToken() {
+        val (_, initialToken) = getUserAndHisToken("admin")
+
+        Thread.sleep(500)
+
+        val request = MockMvcRequestBuilders.get("/refresh").header(tokenUtils.tokenHeader, initialToken)
+        mockMvc.perform(request)
+                .andDo(checkValidnessOfTokenAndItsExpirationTime(initialToken))
+                .andDo(document("api/refresh", *getRefreshMethodSnippets()))
+    }
+
+    private fun checkValidnessOfTokenAndItsExpirationTime(initialToken: String): (MvcResult) -> Unit {
+        return {
+            val refreshedToken = it.response.contentAsString.getTokenFromJson()
+            validateToken(refreshedToken, "admin")
+
+            val expirationDateFromToken = tokenUtils.getExpirationDateFromToken(refreshedToken)
+            val tokenCreationDate = tokenUtils.getTokenCreationDate(refreshedToken)
+
+            Assert.assertTrue(tokenCreationDate!!.isAfter(tokenUtils.getTokenCreationDate(initialToken)))
+            Assert.assertTrue(expirationDateFromToken!!.isAfter(tokenUtils.getTokenCreationDate(initialToken)))
+
+            val between = ChronoUnit.SECONDS.between(tokenCreationDate, expirationDateFromToken)
+            Assert.assertEquals(tokenUtils.expiration, between)
+        }
+    }
+
     private fun getRefreshMethodSnippets(): Array<Snippet> {
-        return arrayOf()
+        val headerDescriptor = headerWithName(tokenUtils.tokenHeader).description("User's JWT");
+        val requestHeaders = HeaderDocumentation.requestHeaders(headerDescriptor)
+
+        val responseFields = PayloadDocumentation.responseFields(
+                PayloadDocumentation.fieldWithPath("token").description("Refreshed user's JWT")
+        )
+
+        return arrayOf(requestHeaders, responseFields)
+    }
+
+    @Test
+    fun accessProtectedResource() {
+        val (admin, adminsToken) = getUserAndHisToken("admin")
+        val adminRequest = MockMvcRequestBuilders.get("/user/${admin.id}").header(tokenUtils.tokenHeader, adminsToken)
+
+        mockMvc.perform(adminRequest)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.content().contentType(jsonType))
+
+        val (user, usersToken) = getUserAndHisToken("user")
+        val userRequest = MockMvcRequestBuilders.get("/user/${user.id}").header(tokenUtils.tokenHeader, usersToken)
+
+        mockMvc.perform(userRequest)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+                .andExpect(MockMvcResultMatchers.status().reason("Access is denied"))
+    }
+
+    private fun getUserAndHisToken(login: String): Pair<AppUser, String> {
+        val user = appUserRepository.findUserByLogin(login)
+        return user to generateValidToken(user.getUserDetails())
+    }
+
+    private fun generateValidToken(userDetails: UserDetails): String {
+        val generatedToken = tokenUtils.generateToken(userDetails)
+        Assert.assertTrue(tokenUtils.tokenIsValid(generatedToken, userDetails))
+        return generatedToken
     }
 
     private fun validateToken(token: String, login: String) {
