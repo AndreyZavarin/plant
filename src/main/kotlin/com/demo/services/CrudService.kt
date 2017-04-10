@@ -1,8 +1,8 @@
 package com.demo.services
 
-interface CrudService<out E, in D, in L> {
-    fun create(dto: D): E
-    fun read(id: L): E
-    fun update(dto: D): E
-    fun delete(id: L)
+interface CrudService<out Entity, in Dto, in Key> {
+    fun create(dto: Dto): Entity
+    fun read(id: Key): Entity
+    fun update(dto: Dto): Entity
+    fun delete(id: Key)
 }
