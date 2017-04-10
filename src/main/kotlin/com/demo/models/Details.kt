@@ -9,34 +9,34 @@ class Details() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    var id = -1;
+    var id = 1
 
     @Column(length = DESCRIPTION_SIZE)
     var experience: String = ""
 
     @Column(length = DESCRIPTION_SIZE)
-    var achievements: String = "";
+    var achievements: String = ""
 
     @Column(length = DESCRIPTION_SIZE)
-    var targets: String = "";
+    var targets: String = ""
 
     @Column(length = DESCRIPTION_SIZE)
-    var lastCold: String = "";
+    var lastCold: String = ""
 
     @Column(length = DESCRIPTION_SIZE)
-    var contraindications: String = "";
+    var contraindications: String = ""
 
     @Column(length = DESCRIPTION_SIZE)
-    var injuries: String = "";
+    var injuries: String = ""
 
     @Column(length = DESCRIPTION_SIZE)
-    var referrer: String = "";
+    var referrer: String = ""
 
     @Column()
-    var crossFit: Boolean = false;
+    var crossFit: Boolean = false
 
     @Column(name = "rules_accepted")
-    var rulesAccepted: Boolean = false;
+    var rulesAccepted: Boolean = false
 
     companion object {
         const private val DESCRIPTION_SIZE = 500

@@ -10,7 +10,7 @@ class Contact() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    var id: Long = -1;
+    var id: Long = 1
 
     @Column
     var type: ContactType = ContactType.EMAIL

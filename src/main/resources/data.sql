@@ -8,4 +8,4 @@ INSERT INTO client (birth_date, date_created, first_name, gender, last_name, mid
 VALUES (DATE '1996-09-26', now(), 'ALEXEY', 'MALE', 'BOZHEV', 'IGOREVICH');
 
 INSERT INTO tariff (name, type, cost, quantity, description, lifetime)
-VALUES ('Тестовый', 1, 666, 10, 'Тестовый тариф', 604800)
+VALUES ('Тестовый', 1, 666, 10, 'Тестовый тариф', 900000000)

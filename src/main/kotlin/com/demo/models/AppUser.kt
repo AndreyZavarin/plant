@@ -12,7 +12,7 @@ class AppUser() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    var id: Long = -1
+    var id: Long = 1
 
     @Column(name = "login", nullable = false, unique = true, updatable = false)
     var login: String = ""
@@ -23,7 +23,7 @@ class AppUser() {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    var role: Role = Role.NONE;
+    var role: Role = Role.NONE
 
     @Column(name = "password_date")
     var passwordSetDate: LocalDateTime = LocalDateTime.now()
