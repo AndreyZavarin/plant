@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-class AuthControllerTest : IntegrationTest() {
+class AuthControllerTest : AbstractIntegrationTest() {
 
     @Autowired
     lateinit var appUserRepository: AppUserRepository

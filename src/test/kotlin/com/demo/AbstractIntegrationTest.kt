@@ -21,7 +21,7 @@ import java.nio.charset.Charset
 @RunWith(SpringRunner::class)
 @SpringBootTest()
 @TestPropertySource(locations = arrayOf("classpath:application-test.properties"))
-abstract class IntegrationTest {
+abstract class AbstractIntegrationTest {
 
     @Rule @JvmField
     val restDocumentation = JUnitRestDocumentation("target/generated-snippets")

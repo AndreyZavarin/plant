@@ -6,7 +6,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 
-class MainControllerTest : IntegrationTest() {
+class MainControllerTest : AbstractIntegrationTest() {
 
     @Test
     fun helloGuestTest() {
