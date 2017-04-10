@@ -3,7 +3,9 @@ package com.demo
 import com.demo.dto.ClientDto
 import com.demo.models.enums.Gender
 import org.hamcrest.core.Is.`is`
+import org.junit.FixMethodOrder
 import org.junit.Test
+import org.junit.runners.MethodSorters
 import org.springframework.http.HttpMethod
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -11,7 +13,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.LocalDate
 import java.time.Month
 
-//todo
+//todo document this and remove annotation
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ClientControllerTest : AbstractIntegrationTest() {
 
     @Test

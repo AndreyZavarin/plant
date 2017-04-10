@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
+//todo doc this
 class TariffControllerTest : AbstractIntegrationTest() {
 
     @Test
@@ -35,7 +36,7 @@ class TariffControllerTest : AbstractIntegrationTest() {
     fun createTariff() {
         val (_, token) = getUserAndHisToken("admin");
 
-        val tariffDto = TariffDto(-1, "ТЕСТОВЫЙ", BigDecimal.TEN, "Тестовый тариф", TariffType.REGULAR, 10, TimeUnit.DAYS.toMillis(7))
+        val tariffDto = TariffDto(-1, "НОВЫЙ", BigDecimal.TEN, "Новый тариф", TariffType.REGULAR, 10, TimeUnit.DAYS.toMillis(7))
         val jsonBody = objectMapper.writeValueAsString(tariffDto)
 
         val request = MockMvcRequestBuilders
@@ -48,21 +49,21 @@ class TariffControllerTest : AbstractIntegrationTest() {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-//    @Test
-//    fun updateTariff() {
-//        val (_, token) = getUserAndHisToken("admin");
-//        val writeValueAsString = objectMapper.writeValueAsString(TariffDto(1, "ANDREY", "ODINOKOV", "ALEXANDROVICH", Gender.MALE, LocalDate.of(1992, Month.JUNE, 16)))
-//
-//        val jsonBody = writeValueAsString
-//
-//        val request = MockMvcRequestBuilders
-//                .request(HttpMethod.POST, "/tariff/1")
-//                .content(jsonBody)
-//                .contentType(jsonType)
-//                .header(tokenUtils.tokenHeader, token)
-//
-//        mockMvc.perform(request)
-//                .andDo(MockMvcResultHandlers.print())
-//    }
+    @Test
+    fun updateTariff() {
+        val (_, token) = getUserAndHisToken("admin");
+
+        val tariffDto = TariffDto(-1, "АКЦИЯ", BigDecimal.TEN, "АКЦИЯ!!!", TariffType.EXPRESS, 1, TimeUnit.DAYS.toMillis(7))
+        val jsonBody = objectMapper.writeValueAsString(tariffDto)
+
+        val request = MockMvcRequestBuilders
+                .request(HttpMethod.POST, "/tariff/1")
+                .content(jsonBody)
+                .contentType(jsonType)
+                .header(tokenUtils.tokenHeader, token)
+
+        mockMvc.perform(request)
+                .andDo(MockMvcResultHandlers.print())
+    }
 
 }
