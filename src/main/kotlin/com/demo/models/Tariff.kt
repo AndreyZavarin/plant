@@ -22,12 +22,12 @@ class Tariff() {
     var cost: BigDecimal = BigDecimal.ZERO
 
     @Column
-    var quantity: Int = 0
+    var quantity: Int = -1
 
     @Column
     var description: String = ""
 
     @Column(name = "lifetime")
-    var lifetimeInMillis: Long = 0
+    var lifetimeInMillis: Long = -1
 
 }

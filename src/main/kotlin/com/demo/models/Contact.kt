@@ -18,7 +18,7 @@ class Contact() {
     @Column(nullable = false)
     var identifier: String = ""
 
-    constructor(type: ContactType, identefier: String) : this() {
+    constructor(type: ContactType, identifier: String) : this() {
         this.type = type
         this.identifier = identifier
     }
