@@ -19,7 +19,7 @@ open class UserController @Autowired constructor(private val userService: AppUse
 
     @RequestMapping(value = "/user/{id}", method = arrayOf(RequestMethod.GET), produces = arrayOf("application/json; charset=utf-8"))
     fun get(@PathVariable id: Long): AppUser {
-        return userService.read(id);
+        return userService.read(id).get();
     }
 
 }

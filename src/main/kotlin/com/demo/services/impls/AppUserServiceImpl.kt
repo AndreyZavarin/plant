@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.util.*
 
 @Service
 class AppUserServiceImpl
@@ -21,7 +22,7 @@ class AppUserServiceImpl
     }
 
     override fun update(dto: AppUserDto): AppUser {
-        val appUser = read(dto.id!!)
+        val appUser = read(dto.id!!).get()
         appUser.role = dto.role
         appUser.passwordHash = passwordEncoder.encode(dto.password);
         appUser.passwordSetDate = LocalDateTime.now()
@@ -30,7 +31,7 @@ class AppUserServiceImpl
         return appUserRepository.save(appUser);
     }
 
-    override fun read(id: Long): AppUser = appUserRepository.findOne(id).get()
+    override fun read(id: Long): Optional<AppUser> = appUserRepository.findOne(id)
 
     override fun delete(id: Long): Unit = throw UnsupportedOperationException("not implemented")
 

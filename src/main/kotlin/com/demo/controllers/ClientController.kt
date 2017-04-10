@@ -1,6 +1,7 @@
 package com.demo.controllers
 
 import com.demo.dto.ClientDto
+import com.demo.exceptions.NotFoundException
 import com.demo.services.ClientService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,7 +18,8 @@ class ClientController @Autowired constructor(
 
     @RequestMapping(value = "/client/{id}", method = arrayOf(RequestMethod.GET), produces = arrayOf("application/json; charset=utf-8"))
     fun get(@PathVariable id: Long): ClientDto {
-        return ClientDto(clientService.read(id))
+        val client = clientService.read(id)
+        return ClientDto(client.orElseThrow(NotFoundException.sup))
     }
 
 }

@@ -1,8 +1,10 @@
 package com.demo.services
 
-interface CrudService<out Entity, in Dto, in Key> {
+import java.util.*
+
+interface CrudService<Entity, in Dto, in Key> {
     fun create(dto: Dto): Entity
-    fun read(id: Key): Entity
+    fun read(id: Key): Optional<Entity>
     fun update(dto: Dto): Entity
     fun delete(id: Key)
 }
