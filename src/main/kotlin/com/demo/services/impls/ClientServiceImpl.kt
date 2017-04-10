@@ -13,7 +13,8 @@ class ClientServiceImpl
 @Autowired constructor(val clientRepository: ClientRepository) : ClientService {
 
     override fun create(dto: ClientDto): Client {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val client = Client(dto.firstName, dto.lastName, dto.middleName, dto.gender, dto.birthDate)
+        return clientRepository.save(client)
     }
 
     override fun read(id: Long): Optional<Client> {
@@ -21,7 +22,16 @@ class ClientServiceImpl
     }
 
     override fun update(id: Long, dto: ClientDto): Client {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val client = clientRepository.findOne(id).orElseThrow(com.demo.exceptions.NotFoundException.sup)
+
+        client.firstName = dto.firstName
+        client.middleName = dto.middleName
+        client.lastName = dto.lastName
+
+        client.gender = dto.gender
+        client.birthDate = dto.birthDate
+
+        return clientRepository.save(client)
     }
 
     override fun delete(id: Long) {
