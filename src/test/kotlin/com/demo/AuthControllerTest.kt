@@ -86,7 +86,6 @@ class AuthControllerTest : AbstractIntegrationTest() {
         val adminRequest = MockMvcRequestBuilders.get("/user/${admin.id}").header(tokenUtils.tokenHeader, adminsToken)
 
         mockMvc.perform(adminRequest)
-                .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(jsonType))
 
