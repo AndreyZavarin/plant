@@ -31,4 +31,13 @@ class Tariff() {
     @Column(name = "lifetime")
     var lifetimeInMillis: Long = -1
 
+    constructor(name: String, type: TariffType, cost: BigDecimal, quantity: Int, description: String, lifetimeInMillis: Long) : this() {
+        this.name = name
+        this.type = type
+        this.cost = cost
+        this.quantity = quantity
+        this.description = description
+        this.lifetimeInMillis = lifetimeInMillis
+    }
+
 }
