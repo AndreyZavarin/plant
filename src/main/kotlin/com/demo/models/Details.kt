@@ -9,7 +9,7 @@ class Details() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    var id = 1
+    var id = -1
 
     @Column(length = DESCRIPTION_SIZE)
     var experience: String = ""

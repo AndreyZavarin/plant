@@ -7,7 +7,6 @@ import com.demo.repositories.TariffRepository
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-
 class SubscriptionTest() : AbstractIntegrationTest() {
 
     @Autowired

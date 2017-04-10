@@ -10,7 +10,7 @@ class Subscription() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    var id: Long = 1
+    var id: Long = -1
 
     @Column
     @Enumerated(EnumType.ORDINAL)
@@ -44,6 +44,5 @@ class Subscription() {
     override fun toString(): String {
         return "Subscription(id=$id, state=$state, startDate=$startDate, endDate=$endDate, quantity=$quantity, client=$client, tariff=$tariff)"
     }
-
 
 }

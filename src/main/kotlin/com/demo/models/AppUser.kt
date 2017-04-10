@@ -12,7 +12,7 @@ class AppUser() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    var id: Long = 1
+    var id: Long = -1
 
     @Column(name = "login", nullable = false, unique = true, updatable = false)
     var login: String = ""
