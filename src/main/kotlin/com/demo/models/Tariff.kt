@@ -4,6 +4,7 @@ import com.demo.models.enums.TariffType
 import java.math.BigDecimal
 import javax.persistence.*
 
+@Entity
 class Tariff() {
 
     @Id

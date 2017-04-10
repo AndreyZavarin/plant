@@ -10,7 +10,7 @@ import java.util.*
 
 @Service
 class TariffServiceImpl
-@Autowired constructor(val tariffRepo: TariffRepository) : TariffService {
+@Autowired constructor(val tariffRepo: TariffRepository): TariffService {
 
     override fun create(dto: TariffDto): Tariff {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

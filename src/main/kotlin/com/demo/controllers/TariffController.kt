@@ -1,6 +1,5 @@
 package com.demo.controllers
 
-import com.demo.dto.ClientDto
 import com.demo.dto.TariffDto
 import com.demo.exceptions.NotFoundException
 import com.demo.services.TariffService
@@ -37,7 +36,7 @@ class TariffController @Autowired constructor(val tariffService: TariffService) 
             produces = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
     fun update(@PathVariable id: Long, @RequestBody(required = true) dto: TariffDto): ResponseEntity<TariffDto> {
         val tariff = tariffService.update(id, dto)
-        return ResponseEntity.ok(TariffDto(tariff));
+        return ResponseEntity.ok(TariffDto(tariff))
     }
 
 }
