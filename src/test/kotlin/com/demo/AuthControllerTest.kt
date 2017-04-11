@@ -3,8 +3,6 @@ package com.demo
 import com.demo.dto.AuthRequest
 import org.junit.Assert
 import org.junit.Test
-import org.springframework.restdocs.headers.HeaderDocumentation
-import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Snippet
@@ -70,8 +68,7 @@ class AuthControllerTest : AbstractIntegrationTest() {
     }
 
     private fun getRefreshMethodSnippets(): Array<Snippet> {
-        val headerDescriptor = headerWithName(tokenUtils.tokenHeader).description("User's JWT");
-        val requestHeaders = HeaderDocumentation.requestHeaders(headerDescriptor)
+        val requestHeaders = getRequestHeaderSnippet()
 
         val responseFields = PayloadDocumentation.responseFields(
                 PayloadDocumentation.fieldWithPath("token").description("Refreshed user's JWT")

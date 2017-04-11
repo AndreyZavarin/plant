@@ -16,7 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.restdocs.JUnitRestDocumentation
+import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
+import org.springframework.restdocs.snippet.Snippet
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers
 import org.springframework.test.context.TestPropertySource
@@ -26,7 +28,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup
 import org.springframework.web.context.WebApplicationContext
 import java.nio.charset.Charset
-import java.util.HashMap
+import java.util.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest()
@@ -81,5 +83,11 @@ abstract class AbstractIntegrationTest {
     protected fun validateToken(token: String, login: String) {
         val appUser = appUserRepository.findUserByLogin(login)
         Assert.assertTrue(tokenUtils.tokenIsValid(token, CurrentUser(appUser)))
+    }
+
+    protected fun getRequestHeaderSnippet(): Snippet {
+        val headerDescriptor = HeaderDocumentation.headerWithName(tokenUtils.tokenHeader).description("User's JWT");
+        val requestHeaders = HeaderDocumentation.requestHeaders(headerDescriptor)
+        return requestHeaders
     }
 }

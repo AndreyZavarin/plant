@@ -10,7 +10,7 @@ import javax.persistence.*
 class Client() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, updatable = false)
     var id: Long = -1
 
@@ -35,6 +35,9 @@ class Client() {
 
     @OneToMany(fetch = FetchType.LAZY)
     var contacts: List<Contact> = ArrayList()
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
+    var subscriptions: List<Subscription> = ArrayList()
 
     @ManyToOne(targetEntity = Details::class, optional = true, fetch = FetchType.LAZY)
     //@OneToOne is not very flexible, but in fact, that is one to one mapping
