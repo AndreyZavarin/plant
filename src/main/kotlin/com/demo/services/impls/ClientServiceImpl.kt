@@ -5,6 +5,9 @@ import com.demo.models.Client
 import com.demo.repositories.ClientRepository
 import com.demo.services.ClientService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -32,6 +35,11 @@ class ClientServiceImpl
         client.birthDate = dto.birthDate
 
         return clientRepository.save(client)
+    }
+
+    override fun getClientPage(pageable: Pageable): Page<ClientDto> {
+        val findAll = clientRepository.findAll<Sort>(pageable)
+        return findAll.map(::ClientDto)
     }
 
     override fun delete(id: Long) {

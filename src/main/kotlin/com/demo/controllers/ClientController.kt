@@ -4,6 +4,8 @@ import com.demo.dto.ClientDto
 import com.demo.exceptions.NotFoundException
 import com.demo.services.ClientService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE
 import org.springframework.http.ResponseEntity
@@ -34,10 +36,18 @@ class ClientController @Autowired constructor(val clientService: ClientService) 
     @RequestMapping(value = "/{id}",
             method = arrayOf(RequestMethod.POST),
             consumes = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE),
-            produces = arrayOf("application/json; charset=utf-8"))
+            produces = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
     fun update(@PathVariable id: Long, @RequestBody(required = true) dto: ClientDto): ResponseEntity<ClientDto> {
         val client = clientService.update(id, dto)
         return ResponseEntity.ok(ClientDto(client))
+    }
+
+    @RequestMapping(value = "/all",
+            method = arrayOf(RequestMethod.GET),
+            produces = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
+    fun getAll(pageable: Pageable): ResponseEntity<Page<ClientDto>> {
+        val clientPage = clientService.getClientPage(pageable)
+        return ResponseEntity.ok(clientPage)
     }
 
 }

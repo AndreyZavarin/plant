@@ -39,9 +39,9 @@ class Client() {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
     var subscriptions: List<Subscription> = ArrayList()
 
-    @ManyToOne(targetEntity = Details::class, optional = true, fetch = FetchType.LAZY)
-    //@OneToOne is not very flexible, but in fact, that is one to one mapping
-    lateinit var details: Details
+    //@ManyToOne(targetEntity = Details::class, optional = true, fetch = FetchType.LAZY)
+    // -- actual comment -- @OneToOne is not very flexible, but in fact, that is one to one mapping
+    //lateinit var details: Details
 
     constructor(firstName: String, lastName: String, middleName: String, gender: Gender, birthDate: LocalDate) : this() {
         this.firstName = firstName

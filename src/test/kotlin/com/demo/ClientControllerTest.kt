@@ -19,8 +19,9 @@ import java.time.Month
 
 class ClientControllerTest : AbstractIntegrationTest() {
 
-    private val alexData = ClientDto(-1, "ALEXEY", "BOZHEV", "IGOREVICH", Gender.MALE, LocalDate.of(1996, Month.SEPTEMBER, 26))
-    private val juniorData = ClientDto(-1, "NIKITA", "BOZHEV", "IGOREVICH", Gender.MALE, LocalDate.of(2002, Month.JUNE, 23))
+    private val alexData = ClientDto(-1, "ALEXEY", "BOZHEV", "IGOREVICH", Gender.MALE, LocalDate.of(1996, Month.SEPTEMBER, 26), emptyList())
+    private val juniorData = ClientDto(-1, "NIKITA", "BOZHEV", "IGOREVICH", Gender.MALE, LocalDate.of(2002, Month.JUNE, 23), emptyList())
+    private val andrewData = ClientDto(2, "ANDREY", "ODINOKOV", "ALEXANDROVICH", Gender.MALE, LocalDate.of(1992, Month.JUNE, 16), emptyList())
 
     private val clientFields = getClientFields()
 
@@ -85,8 +86,8 @@ class ClientControllerTest : AbstractIntegrationTest() {
 
     @Test
     fun updateClient() {
-        val (_, token) = getUserAndHisToken("admin");
-        val jsonBody = objectMapper.writeValueAsString(ClientDto(2, "ANDREY", "ODINOKOV", "ALEXANDROVICH", Gender.MALE, LocalDate.of(1992, Month.JUNE, 16)))
+        val (_, token) = getUserAndHisToken("admin")
+        val jsonBody = objectMapper.writeValueAsString(andrewData)
 
         val request = RestDocumentationRequestBuilders
                 .post("/client/{id}", 2)
@@ -101,6 +102,18 @@ class ClientControllerTest : AbstractIntegrationTest() {
                         requestFields(*clientFields),
                         responseFields(*clientFields),
                         getRequestHeaderSnippet()))
+    }
+
+    @Test
+    fun getAllClients() {
+        val (_, token) = getUserAndHisToken("admin")
+
+        val request = RestDocumentationRequestBuilders
+                .get("/client/all")
+                .header(tokenUtils.tokenHeader, token)
+
+        mockMvc.perform(request)
+                .andDo(print())
     }
 
     private fun getIdPathParameterSnippet(): Snippet {
