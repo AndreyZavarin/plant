@@ -87,8 +87,8 @@ class ClientControllerTest : AbstractIntegrationTest() {
     @Test
     fun updateClient() {
         val (_, token) = getUserAndHisToken("admin")
-        val jsonBody = objectMapper.writeValueAsString(andrewData)
 
+        val jsonBody = objectMapper.writeValueAsString(andrewData)
         val request = RestDocumentationRequestBuilders
                 .post("/client/{id}", 2)
                 .content(jsonBody)
@@ -96,7 +96,19 @@ class ClientControllerTest : AbstractIntegrationTest() {
                 .header(tokenUtils.tokenHeader, token)
 
         mockMvc.perform(request)
-                .andDo(print())
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(jsonType))
+
+                .andExpect(jsonPath("$.id", `is`(2)))
+                .andExpect(jsonPath("$.lastName", `is`(andrewData.lastName)))
+                .andExpect(jsonPath("$.firstName", `is`(andrewData.firstName)))
+                .andExpect(jsonPath("$.middleName", `is`(andrewData.middleName)))
+                .andExpect(jsonPath("$.gender", `is`(andrewData.gender.name)))
+
+                .andExpect(jsonPath("$.birthDate[0]", `is`(andrewData.birthDate.year)))
+                .andExpect(jsonPath("$.birthDate[1]", `is`(andrewData.birthDate.monthValue)))
+                .andExpect(jsonPath("$.birthDate[2]", `is`(andrewData.birthDate.dayOfMonth)))
+
                 .andDo(document("api/client/{id}",
                         getIdPathParameterSnippet(),
                         requestFields(*clientFields),
@@ -113,22 +125,29 @@ class ClientControllerTest : AbstractIntegrationTest() {
                 .header(tokenUtils.tokenHeader, token)
 
         mockMvc.perform(request)
-                .andDo(print())
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(jsonType))
+
+                .andDo(document("api/client/getAll", relaxedResponseFields(
+                        fieldWithPath("content").description("An array of clients").attributes(),
+                        *getClientFields("content[].")
+                )))
     }
 
     private fun getIdPathParameterSnippet(): Snippet {
         return pathParameters(parameterWithName("id").description("The client's id"))
     }
 
-    private fun getClientFields(): Array<FieldDescriptor> {
-        val firstName = fieldWithPath("firstName").description("Client's firstName")
-        val lastName = fieldWithPath("lastName").description("Client's last name")
-        val middleName = fieldWithPath("middleName").description("Client's middle name")
-        val birthDate = fieldWithPath("birthDate").description("Client's birth date")
-        val gender = fieldWithPath("gender").description("Client's gender")
-        val id = fieldWithPath("id").description("The client's id in our system")
+    private fun getClientFields(prefix: String = ""): Array<FieldDescriptor> {
+        val firstName = fieldWithPath(prefix + "firstName").description("Client's firstName")
+        val lastName = fieldWithPath(prefix + "lastName").description("Client's last name")
+        val middleName = fieldWithPath(prefix + "middleName").description("Client's middle name")
+        val birthDate = fieldWithPath(prefix + "birthDate").description("Client's birth date")
+        val gender = fieldWithPath(prefix + "gender").description("Client's gender")
+        val id = fieldWithPath(prefix + "id").description("The client's id in our system")
+        val subscriptions = fieldWithPath(prefix + "subscriptions").description("Array of client's subscriptions")
 
-        return arrayOf(firstName, lastName, middleName, birthDate, gender, id)
+        return arrayOf(firstName, lastName, middleName, birthDate, gender, id, subscriptions)
     }
 
 }
