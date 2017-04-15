@@ -7,7 +7,7 @@ import java.util.function.Supplier
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class NotFoundException : Throwable() {
 
-    companion object sup : Supplier<NotFoundException> {
+    companion object notFoundExceptionSupplier : Supplier<NotFoundException> {
         override fun get(): NotFoundException {
             return NotFoundException()
         }

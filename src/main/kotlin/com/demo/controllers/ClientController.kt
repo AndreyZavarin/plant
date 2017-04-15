@@ -30,7 +30,7 @@ class ClientController @Autowired constructor(val clientService: ClientService) 
             produces = arrayOf(APPLICATION_JSON_UTF8_VALUE))
     fun read(@PathVariable id: Long): ResponseEntity<ClientDto> {
         val client = clientService.read(id)
-        return ResponseEntity.ok(ClientDto(client.orElseThrow(NotFoundException.sup)))
+        return ResponseEntity.ok(ClientDto(client.orElseThrow(NotFoundException.notFoundExceptionSupplier)))
     }
 
     @RequestMapping(value = "/{id}",

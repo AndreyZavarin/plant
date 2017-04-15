@@ -1,7 +1,7 @@
 package com.demo.controllers
 
 import com.demo.dto.SubscriptionDto
-import com.demo.exceptions.NotFoundException
+import com.demo.exceptions.NotFoundException.notFoundExceptionSupplier
 import com.demo.services.SubscriptionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -24,6 +24,14 @@ class SubscriptionController
         return ResponseEntity.ok(SubscriptionDto(updatedSubscription))
     }
 
+    @RequestMapping(value = "{id}/decrement",
+            method = arrayOf(RequestMethod.POST),
+            produces = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
+    fun decrement(@PathVariable id: Long): ResponseEntity<SubscriptionDto> {
+        val updatedSubscription = subscriptionService.decrement(id)
+        return ResponseEntity.ok(SubscriptionDto(updatedSubscription))
+    }
+
     @RequestMapping(value = "",
             method = arrayOf(RequestMethod.POST),
             consumes = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE),
@@ -37,8 +45,8 @@ class SubscriptionController
             method = arrayOf(RequestMethod.GET),
             produces = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
     fun read(@PathVariable id: Long): ResponseEntity<SubscriptionDto> {
-        val subscription = subscriptionService.read(id)
-        return ResponseEntity.ok(SubscriptionDto(subscription.orElseThrow(NotFoundException.sup)))
+        val subscription = subscriptionService.read(id).orElseThrow(notFoundExceptionSupplier)
+        return ResponseEntity.ok(SubscriptionDto(subscription))
     }
 
 }

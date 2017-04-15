@@ -7,10 +7,10 @@ data class SubscriptionDto(
         val id: Long,
         val subState: SubState,
         val quantity: Int,
-        val clientDto: ClientDto,
-        val tariffDto: TariffDto) {
+        val clientId: Long,
+        val tariffId: Long) {
 
-    constructor(subscription: Subscription) : this(subscription.id, subscription.state, subscription.quantity,
-            ClientDto(subscription.client), TariffDto(subscription.tariff))
+    constructor(subscription: Subscription)
+            : this(subscription.id, subscription.state, subscription.quantity, subscription.client.id, subscription.tariff.id)
 
 }

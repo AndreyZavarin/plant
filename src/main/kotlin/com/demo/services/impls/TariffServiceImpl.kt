@@ -23,7 +23,7 @@ class TariffServiceImpl
     }
 
     override fun update(id: Long, dto: TariffDto): Tariff {
-        val tariff = tariffRepo.findOne(id).orElseThrow(NotFoundException.sup)
+        val tariff = tariffRepo.findOne(id).orElseThrow(NotFoundException.notFoundExceptionSupplier)
 
         tariff.name = dto.name
         tariff.lifetimeInMillis = dto.lifetimeInMillis

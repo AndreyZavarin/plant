@@ -25,7 +25,7 @@ class ClientServiceImpl
     }
 
     override fun update(id: Long, dto: ClientDto): Client {
-        val client = clientRepository.findOne(id).orElseThrow(com.demo.exceptions.NotFoundException.sup)
+        val client = clientRepository.findOne(id).orElseThrow(com.demo.exceptions.NotFoundException.notFoundExceptionSupplier)
 
         client.firstName = dto.firstName
         client.middleName = dto.middleName
