@@ -13,4 +13,6 @@ data class SubscriptionDto(
     constructor(subscription: Subscription)
             : this(subscription.id, subscription.state, subscription.quantity, subscription.client.id, subscription.tariff.id)
 
+    constructor(clientId: Long, tariffId: Long) : this(-1, SubState.IDLE, -1, clientId, tariffId)
+
 }

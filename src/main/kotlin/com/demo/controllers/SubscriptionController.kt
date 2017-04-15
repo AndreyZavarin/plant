@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 class SubscriptionController
 @Autowired constructor(val subscriptionService: SubscriptionService) {
 
-    @RequestMapping(value = "{id}/",
+    @RequestMapping(value = "{id}",
             method = arrayOf(RequestMethod.POST),
             consumes = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE),
             produces = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -41,7 +41,7 @@ class SubscriptionController
         return ResponseEntity.ok(SubscriptionDto(newSubscription))
     }
 
-    @RequestMapping(value = "{id}/",
+    @RequestMapping(value = "{id}",
             method = arrayOf(RequestMethod.GET),
             produces = arrayOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
     fun read(@PathVariable id: Long): ResponseEntity<SubscriptionDto> {
