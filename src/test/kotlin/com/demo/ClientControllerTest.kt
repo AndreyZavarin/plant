@@ -45,7 +45,7 @@ class ClientControllerTest : AbstractIntegrationTest() {
                 .andExpect(jsonPath("$.birthDate[1]", `is`(alexData.birthDate.monthValue)))
                 .andExpect(jsonPath("$.birthDate[2]", `is`(alexData.birthDate.dayOfMonth)))
 
-                .andDo(document("api/client/{id}",
+                .andDo(document("api/client/read",
                         getIdPathParameterSnippet(),
                         getRequestHeaderSnippet(),
                         responseFields(*clientFields)))
@@ -77,7 +77,7 @@ class ClientControllerTest : AbstractIntegrationTest() {
                 .andExpect(jsonPath("$.birthDate[1]", `is`(juniorData.birthDate.monthValue)))
                 .andExpect(jsonPath("$.birthDate[2]", `is`(juniorData.birthDate.dayOfMonth)))
 
-                .andDo(document("api/client/",
+                .andDo(document("api/client/create",
                         requestFields(*clientFields),
                         responseFields(*clientFields),
                         getRequestHeaderSnippet()))
@@ -108,7 +108,7 @@ class ClientControllerTest : AbstractIntegrationTest() {
                 .andExpect(jsonPath("$.birthDate[1]", `is`(andrewData.birthDate.monthValue)))
                 .andExpect(jsonPath("$.birthDate[2]", `is`(andrewData.birthDate.dayOfMonth)))
 
-                .andDo(document("api/client/{id}",
+                .andDo(document("api/client/update",
                         getIdPathParameterSnippet(),
                         requestFields(*clientFields),
                         responseFields(*clientFields),

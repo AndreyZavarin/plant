@@ -2,6 +2,7 @@ package com.demo
 
 import com.demo.dto.AuthRequest
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.payload.PayloadDocumentation
@@ -39,7 +40,8 @@ class AuthControllerTest : AbstractIntegrationTest() {
         return arrayOf(requestFields, responseFields);
     }
 
-    @Test
+    //@Test
+    @Ignore
     fun refreshToken() {
         val (_, initialToken) = getUserAndHisToken("admin")
 

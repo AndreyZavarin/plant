@@ -47,7 +47,7 @@ class TariffControllerTest : AbstractIntegrationTest() {
                 .andExpect(jsonPath("$.cost", `is`(666.0)))
                 .andExpect(jsonPath("$.lifetimeInMillis", `is`(900000000)))
 
-                .andDo(document("api/tariff/{id}",
+                .andDo(document("api/tariff/read",
                         getIdPathParameterSnippet(),
                         getRequestHeaderSnippet(),
                         responseFields(*tariffFields)))
@@ -79,9 +79,10 @@ class TariffControllerTest : AbstractIntegrationTest() {
                 .andExpect(jsonPath("$.cost", `is`(10)))
                 .andExpect(jsonPath("$.lifetimeInMillis", `is`(604800000)))
 
-                .andDo(document("api/tariff",
+                .andDo(document("api/tariff/create",
                         getRequestHeaderSnippet(),
-                        responseFields(*tariffFields)
+                        responseFields(*tariffFields),
+                        requestFields(*tariffFields)
                 ))
     }
 
@@ -110,7 +111,7 @@ class TariffControllerTest : AbstractIntegrationTest() {
                 .andExpect(jsonPath("$.cost", `is`(0)))
                 .andExpect(jsonPath("$.lifetimeInMillis", `is`(86400000)))
 
-                .andDo(document("api/tariff/{id}",
+                .andDo(document("api/tariff/update",
                         getIdPathParameterSnippet(),
                         requestFields(*tariffFields),
                         responseFields(*tariffFields),

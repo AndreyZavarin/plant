@@ -6,7 +6,6 @@
 :toclevels: 4
 :sectlinks:
 
-
 [introduction]
 = Introduction
 
@@ -71,9 +70,9 @@ use of HTTP status codes.
 
 == AUTH-TEST
 
-The Greeting provides the entry point into the service.
+How to get and update json web token, json web token is needed for auth purposes
 
-=== Auth via POST REQUEST
+=== GET YOUR JWT
 
 ==== Request structure
 
@@ -94,3 +93,192 @@ include::{snippets}/api/auth/http-response.adoc[]
 ==== CURL request
 
 include::{snippets}/api/auth/curl-request.adoc[]
+
+
+
+
+== CLIENT-TEST
+
+
+
+=== Get clients list
+
+==== Request structure
+
+include::{snippets}/api/client/getAll/http-request.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/client/getAll/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/client/getAll/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/client/getAll/curl-request.adoc[]
+
+
+
+=== Create client
+
+==== Request structure
+
+include::{snippets}/api/client/create/http-request.adoc[]
+
+==== Request fields
+
+include::{snippets}/api/client/create/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/client/create/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/client/create/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/client/create/curl-request.adoc[]
+
+
+=== Get single client
+
+==== Request structure
+
+include::{snippets}/api/client/read/http-request.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/client/read/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/client/read/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/client/read/curl-request.adoc[]
+
+
+=== Update client
+
+==== Request structure
+
+include::{snippets}/api/client/update/http-request.adoc[]
+
+==== Request fields
+
+include::{snippets}/api/client/update/request-fields.adoc[]
+
+=== Path parameters
+
+include::{snippets}/api/client/update/path-parameters.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/client/update/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/client/update/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/client/update/curl-request.adoc[]
+
+
+
+
+
+== TARIFF-TEST
+
+
+=== Create tariff
+
+==== Request structure
+
+include::{snippets}/api/tariff/create/http-request.adoc[]
+
+==== Request fields
+
+include::{snippets}/api/tariff/create/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/tariff/create/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/tariff/create/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/tariff/create/curl-request.adoc[]
+
+=== Get single client
+
+==== Request structure
+
+include::{snippets}/api/tariff/read/http-request.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/tariff/read/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/tariff/read/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/tariff/read/curl-request.adoc[]
+
+
+
+=== Get single tariff
+
+==== Request structure
+
+include::{snippets}/api/tariff/read/http-request.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/tariff/read/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/tariff/read/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/tariff/read/curl-request.adoc[]
+
+
+=== Update tariff
+
+==== Request structure
+
+include::{snippets}/api/tariff/update/http-request.adoc[]
+
+==== Request fields
+
+include::{snippets}/api/tariff/update/request-fields.adoc[]
+
+=== Path parameters
+
+include::{snippets}/api/tariff/update/path-parameters.adoc[]
+
+==== Response fields
+
+include::{snippets}/api/tariff/update/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/api/tariff/update/http-response.adoc[]
+
+==== CURL request
+
+include::{snippets}/api/tariff/update/curl-request.adoc[]
