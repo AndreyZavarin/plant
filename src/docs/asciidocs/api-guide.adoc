@@ -237,7 +237,6 @@ include::{snippets}/api/tariff/read/http-response.adoc[]
 include::{snippets}/api/tariff/read/curl-request.adoc[]
 
 
-
 === Get single tariff
 
 ==== Request structure

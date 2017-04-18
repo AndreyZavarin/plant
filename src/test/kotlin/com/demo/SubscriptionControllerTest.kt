@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @FixMethodOrder
-class SubscriptionTest() : AbstractIntegrationTest() {
+class SubscriptionControllerTest() : AbstractIntegrationTest() {
 
     @Autowired
     lateinit var clientRepo: ClientRepository
