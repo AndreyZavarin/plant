@@ -14,6 +14,10 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+
 
 @Configuration
 @EnableWebSecurity
@@ -48,7 +52,8 @@ open class WebSecurityConfiguration
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
                 .csrf().disable()
-                .cors().disable()
+                .cors()
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
@@ -60,13 +65,21 @@ open class WebSecurityConfiguration
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
-        //.and().headers().addHeaderWriter()
-        // Custom JWT based authentication
-        httpSecurity
+                .and()
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter::class.java)
+    }
 
-//        http.authorizeRequests()
-//                .accessDeniedHandler(CustomAccessDeniedHandler())
-//                .authenticationEntryPoint(CustomAuthenticationEntryPoint())
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedHeaders = listOf("*")
+        configuration.allowedMethods = listOf("*")
+        configuration.allowCredentials = true
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+
+        return source
     }
 }
