@@ -48,6 +48,7 @@ open class WebSecurityConfiguration
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
                 .csrf().disable()
+                .cors().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
