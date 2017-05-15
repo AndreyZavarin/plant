@@ -16,10 +16,10 @@ class Subscription() {
     @Enumerated(EnumType.ORDINAL)
     var state = SubState.IDLE
 
-    @Column
+    @Column(name = "start_date")
     var startDate: LocalDateTime = LocalDateTime.now()
 
-    @Column
+    @Column(name = "end_date")
     var endDate: LocalDateTime = LocalDateTime.now()
 
     @Column

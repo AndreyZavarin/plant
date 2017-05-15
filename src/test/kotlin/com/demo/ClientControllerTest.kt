@@ -48,7 +48,7 @@ class ClientControllerTest : AbstractIntegrationTest() {
                 .andDo(document("api/client/read",
                         getIdPathParameterSnippet(),
                         getRequestHeaderSnippet(),
-                        responseFields(*clientFields)))
+                        responseFields(*clientFields, *getSubscriptionFields("subscriptions[]."))))
     }
 
     @Test
@@ -66,7 +66,7 @@ class ClientControllerTest : AbstractIntegrationTest() {
                 .andExpect(status().isOk)
                 .andExpect(content().contentType(jsonType))
 
-                .andExpect(jsonPath("$.id", `is`(3)))
+                .andExpect(jsonPath("$.id", `is`(11)))
 
                 .andExpect(jsonPath("$.lastName", `is`(juniorData.lastName)))
                 .andExpect(jsonPath("$.firstName", `is`(juniorData.firstName)))
@@ -147,6 +147,17 @@ class ClientControllerTest : AbstractIntegrationTest() {
         val subscriptions = fieldWithPath(prefix + "subscriptions").description("Array of client's subscriptions")
 
         return arrayOf(firstName, lastName, middleName, birthDate, gender, id, subscriptions)
+    }
+
+    //todo - move to subscription test
+    private fun getSubscriptionFields(prefix: String = ""): Array<FieldDescriptor> {
+       val id = fieldWithPath(prefix + "id").description("")
+       val subState = fieldWithPath(prefix + "subState").description("")
+       val quantity = fieldWithPath(prefix + "quantity").description("")
+       val clientId = fieldWithPath(prefix + "clientId").description("")
+       val tariffId = fieldWithPath(prefix + "tariffId").description("")
+
+       return arrayOf(id, subState, quantity, clientId, tariffId)
     }
 
 }
