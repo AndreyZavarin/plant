@@ -19,8 +19,8 @@ class SubscriptionServiceImpl
         val tariffRepository: TariffRepository) : SubscriptionService {
 
     override fun create(dto: SubscriptionDto): Subscription {
-        val client = clientRepository.findOne(dto.clientId).orElseThrow(notFoundExceptionSupplier)
-        val tariff = tariffRepository.findOne(dto.tariffId).orElseThrow(notFoundExceptionSupplier)
+        val client = clientRepository.findById(dto.clientId).orElseThrow(notFoundExceptionSupplier)
+        val tariff = tariffRepository.findById(dto.tariffId).orElseThrow(notFoundExceptionSupplier)
 
         val subscription = Subscription(client, tariff)
 
@@ -28,7 +28,7 @@ class SubscriptionServiceImpl
     }
 
     override fun read(id: Long): Optional<Subscription> {
-        return subscriptionRepository.findOne(id)
+        return subscriptionRepository.findById(id)
     }
 
     override fun update(id: Long, dto: SubscriptionDto): Subscription {
@@ -40,7 +40,7 @@ class SubscriptionServiceImpl
     }
 
     override fun decrement(id: Long): Subscription {
-        val subscription = subscriptionRepository.findOne(id).orElseThrow(notFoundExceptionSupplier)
+        val subscription = subscriptionRepository.findById(id).orElseThrow(notFoundExceptionSupplier)
 
         subscription.quantity--
 

@@ -31,7 +31,7 @@ class AppUserServiceImpl
         return appUserRepository.save(appUser);
     }
 
-    override fun read(id: Long): Optional<AppUser> = appUserRepository.findOne(id)
+    override fun read(id: Long): Optional<AppUser> = appUserRepository.findById(id)
 
     override fun delete(id: Long): Unit = throw UnsupportedOperationException("not implemented")
 
